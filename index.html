@@ -1169,9 +1169,13 @@
   }
 
   @media (max-width:860px){
+    /* backdrop-filter convierte al header en bloque contenedor de sus hijos
+       position:fixed, lo que encerraba el menu dentro de la altura del header.
+       En movil se desactiva para que el menu ocupe toda la pantalla. */
+    header{backdrop-filter:none;-webkit-backdrop-filter:none;background:var(--bg);}
     nav ul{
       position:fixed;
-      inset:78px 0 0 0;
+      inset:var(--menu-top,79px) 0 0 0;
       background:var(--bg);
       flex-direction:column;
       justify-content:flex-start;
@@ -1766,7 +1770,17 @@
   // mobile nav
   const mobileToggle = document.getElementById('mobileToggle');
   const navList = document.getElementById('navList');
-  mobileToggle.addEventListener('click', () => navList.classList.toggle('open'));
+  const headerBar = document.querySelector('header');
+  function syncMenuTop(){
+    const bottom = Math.max(0, Math.round(headerBar.getBoundingClientRect().bottom));
+    document.documentElement.style.setProperty('--menu-top', bottom + 'px');
+  }
+  mobileToggle.addEventListener('click', () => {
+    syncMenuTop();
+    navList.classList.toggle('open');
+  });
+  window.addEventListener('resize', () => { if(navList.classList.contains('open')) syncMenuTop(); });
+  window.addEventListener('scroll', () => { if(navList.classList.contains('open')) syncMenuTop(); }, {passive:true});
   navList.querySelectorAll('a').forEach(a => {
     a.addEventListener('click', () => navList.classList.remove('open'));
   });
