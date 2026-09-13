@@ -118,7 +118,17 @@
     text-decoration:none;
     color:var(--forest);
   }
-  .logo em{font-style:normal;color:var(--gold-ink);font-size:0.78em;padding:0 0.05em;}
+  /* Das Kaufmanns-Und kommt aus Jost: das Fraunces-Zeichen ist so eng
+     gezeichnet, dass es in kleinen Groessen zu einem Knoten verklumpt. */
+  .logo em{
+    font-family:"Jost", sans-serif;
+    font-style:normal;
+    font-weight:400;
+    color:var(--gold-ink);
+    font-size:0.82em;
+    padding:0 0.12em;
+    vertical-align:0.02em;
+  }
   nav ul{
     list-style:none;
     display:flex;
@@ -234,14 +244,16 @@
     letter-spacing:-0.01em;
     overflow-wrap:break-word;
   }
-  /* Das Fraunces-Kaufmanns-Und ist sehr verschnörkelt und stört als
-     Kursive im Logo — etwas kleiner und aufrecht wirkt es ruhiger. */
+  /* Das Fraunces-Kaufmanns-Und ist sehr eng gezeichnet und verklumpt.
+     Das geometrische Und aus Jost bleibt in jeder Groesse offen. */
   .hero h1 .accent{
+    font-family:"Jost", sans-serif;
     color:var(--gold-ink);
     font-style:normal;
-    font-size:0.72em;
-    padding:0 0.06em;
-    vertical-align:0.04em;
+    font-weight:400;
+    font-size:0.78em;
+    padding:0 0.12em;
+    vertical-align:0.02em;
   }
   .hero p.lede{
     margin-top:22px;
