@@ -494,8 +494,10 @@
   }
   .fact-flip-inner{
     position:relative;
-    min-height:220px;
-    transition:transform .7s cubic-bezier(.4,.15,.2,1);
+    /* Fallback ohne JS; die tatsaechliche Hoehe setzt das Skript unten
+       passend zur sichtbaren Seite. */
+    min-height:400px;
+    transition:transform .7s cubic-bezier(.4,.15,.2,1), min-height .45s ease;
     -webkit-transform-style:preserve-3d;
     transform-style:preserve-3d;
     -webkit-transform:rotateY(0deg) translateZ(0);
@@ -524,13 +526,16 @@
     -webkit-transform:rotateY(180deg);
     transform:rotateY(180deg);
     transition:opacity 0s linear .35s;
+    /* Unsichtbare Rueckseite darf keine Klicks auf der Vorderseite abfangen */
+    pointer-events:none;
     background:rgba(250,246,236,0.06);
     border:1px solid rgba(250,246,236,0.22);
     border-radius:2px;
     padding:clamp(20px,3vw,28px);
     overflow-y:auto;
   }
-  .fact-flip.is-flipped .fact-flip-back{opacity:1;}
+  .fact-flip.is-flipped .fact-flip-back{opacity:1;pointer-events:auto;}
+  .fact-flip.is-flipped .fact-flip-front{pointer-events:none;}
   .fact-flip-back p{
     font-size:0.86rem;
     line-height:1.6;
@@ -557,12 +562,15 @@
   }
   .fact-flip-toggle:hover{background:var(--gold);border-color:var(--gold);color:var(--forest);}
   .facts-grid-2{grid-template-columns:repeat(2,1fr);max-width:520px;margin:0 auto;}
+  .fact-flip-hotels .fact-flip-inner{min-height:470px;}
   .fact-flip-front .facts-source{margin-top:18px;}
   @media (max-width:980px){
-    .fact-flip-inner{min-height:520px;}
+    .fact-flip-inner{min-height:600px;}
+    .fact-flip-hotels .fact-flip-inner{min-height:660px;}
   }
   @media (max-width:560px){
-    .fact-flip-inner{min-height:560px;}
+    .fact-flip-inner{min-height:720px;}
+    .fact-flip-hotels .fact-flip-inner{min-height:840px;}
   }
 
   /* ---------- FOUNDER BAR (top banner) ---------- */
@@ -1545,21 +1553,37 @@
               <p class="eyebrow">F&uuml;r Hotels &amp; Pensionen</p>
               <h2>G&auml;ste buchen das Zimmer, das sie sehen k&ouml;nnen</h2>
             </div>
-            <div class="facts-grid">
-              <div class="fact">
-                <div class="num">60&nbsp;%</div>
-                <p>mehr Buchungen f&uuml;r H&auml;user mit hochwertigen Fotos gegen&uuml;ber H&auml;usern ohne.</p>
-              </div>
-              <div class="fact">
-                <div class="num">225&nbsp;%</div>
-                <p>h&ouml;here Wahrscheinlichkeit einer Buchungsanfrage, sobald ein Objekt &uuml;berhaupt Bilder zeigt.</p>
-              </div>
-              <div class="fact">
-                <div class="num">80&nbsp;%</div>
-                <p>der Reisenden entscheiden zuerst &uuml;ber das Bild &mdash; nicht &uuml;ber den Text.</p>
+            <div class="fact-flip fact-flip-hotels" id="hotelFlip">
+              <div class="fact-flip-inner">
+                <div class="fact-flip-front">
+                  <div class="facts-grid">
+                    <div class="fact">
+                      <div class="num">60&nbsp;%</div>
+                      <p>mehr Buchungen f&uuml;r H&auml;user mit hochwertigen Fotos gegen&uuml;ber H&auml;usern ohne.</p>
+                    </div>
+                    <div class="fact">
+                      <div class="num">225&nbsp;%</div>
+                      <p>h&ouml;here Wahrscheinlichkeit einer Buchungsanfrage, sobald ein Objekt &uuml;berhaupt Bilder zeigt.</p>
+                    </div>
+                    <div class="fact">
+                      <div class="num">80&nbsp;%</div>
+                      <p>der Reisenden entscheiden zuerst &uuml;ber das Bild &mdash; nicht &uuml;ber den Text.</p>
+                    </div>
+                  </div>
+                  <p class="facts-source">Quellen: Expedia-Auswertung zur Bildqualit&auml;t; Branchendaten zu Objektfotos und Buchungsanfragen.</p>
+                  <button type="button" class="fact-flip-toggle">Mehr erfahren &rarr;</button>
+                </div>
+                <div class="fact-flip-back">
+                  <p>Bilder sind bei Hotels die erste Filterstufe: Reisende nennen schlechte Fotos als h&auml;ufigsten Grund, ein Haus von vornherein auszuschlie&szlig;en. Entschieden wird beim Scrollen &mdash; lange bevor jemand die Beschreibung liest.</p>
+                  <p><strong>Wir haben doch schon Fotos &mdash; reicht das nicht?</strong><br>Meistens nicht. Expedia empfiehlt mindestens 20 Bilder pro Haus und mindestens vier pro Zimmertyp, mit einer Breite ab 2.880 Pixeln. Wer drei dunkle Handyfotos zeigt, f&auml;llt in der Sortierung nach Bildqualit&auml;t automatisch nach hinten.</p>
+                  <p><strong>Welche Bilder wirklich ziehen:</strong> Zimmer mit Fenster und Ausblick l&ouml;sen die st&auml;rkste positive Reaktion aus, danach folgen Bad sowie Nebenr&auml;ume wie Terrasse, Fr&uuml;hst&uuml;cksraum oder Restaurant. Jede Aufnahme sollte eine konkrete Frage beantworten: Wie gro&szlig; ist das Zimmer? Wie hell? Was sehe ich vom Fenster aus?</p>
+                  <p><strong>Was Buchungen kostet:</strong> Verzerrte Fisheye-Aufnahmen und ungew&ouml;hnliche Winkel wecken Misstrauen &mdash; G&auml;ste unterstellen, dass etwas verborgen werden soll. Dasselbe gilt f&uuml;r dunkle oder niedrig aufgel&ouml;ste Bilder.</p>
+                  <p><strong>Ein Beispiel:</strong> Nach einer kompletten Bild&uuml;berarbeitung meldete das Papaya Playa Project einen um 50,3&nbsp;% h&ouml;heren durchschnittlichen Zimmerpreis und 27,5&nbsp;% mehr gebuchte Zimmern&auml;chte im Jahresvergleich.</p>
+                  <p class="fact-flip-source">Quellen: <a href="https://partner.expediagroup.com/en-us/resources/blog/hotel-booking-success-guide-expedia-partner-central" target="_blank" rel="noopener">Expedia Group</a> &middot; <a href="https://travolution.com/articles/12115/expedia-study-finds-that-quality-photos-boost-ota-sales" target="_blank" rel="noopener">Travolution</a></p>
+                  <button type="button" class="fact-flip-toggle">&larr; Zur&uuml;ck</button>
+                </div>
               </div>
             </div>
-            <p class="facts-source">Quellen: Expedia-Auswertung zur Bildqualit&auml;t; Branchendaten zu Objektfotos und Buchungsanfragen.</p>
           </div>
 
         </div>
@@ -2027,14 +2051,54 @@
     activateSubtab(b.dataset.subtab);
   }));
 
-  // ---------- Restaurant-Karte: Flip ----------
-  document.querySelectorAll('.fact-flip').forEach(function(card){
-    card.querySelectorAll('.fact-flip-toggle').forEach(function(btn){
-      btn.addEventListener('click', function(){
-        card.classList.toggle('is-flipped');
+  // ---------- Fakten-Karten: Flip ----------
+  // Die Karte bekommt immer genau die Hoehe der sichtbaren Seite, damit
+  // vorne keine Luecke entsteht und hinten nichts abgeschnitten wird.
+  (function(){
+    const cards = document.querySelectorAll('.fact-flip');
+
+    // Beide Seiten einmal ohne Hoehenvorgabe ausmessen und merken.
+    function measureCard(card){
+      const inner = card.querySelector('.fact-flip-inner');
+      const front = card.querySelector('.fact-flip-front');
+      const back  = card.querySelector('.fact-flip-back');
+      if(!inner || !front || !back) return;
+      const oldTransition = inner.style.transition;
+      inner.style.transition = 'none';
+      inner.style.minHeight = '0px';
+      card._faceHeights = {
+        front: Math.ceil(front.scrollHeight),
+        back:  Math.ceil(back.scrollHeight)
+      };
+      applyHeight(card);
+      void inner.offsetHeight; // Layout erzwingen, damit nicht von 0 animiert wird
+      inner.style.transition = oldTransition;
+    }
+
+    function applyHeight(card){
+      const inner = card.querySelector('.fact-flip-inner');
+      const h = card._faceHeights;
+      if(!inner || !h) return;
+      inner.style.minHeight = (card.classList.contains('is-flipped') ? h.back : h.front) + 'px';
+    }
+
+    function fitCard(card){ applyHeight(card); }
+    function fitAll(){ cards.forEach(measureCard); }
+
+    cards.forEach(function(card){
+      card.querySelectorAll('.fact-flip-toggle').forEach(function(btn){
+        btn.addEventListener('click', function(){
+          card.classList.toggle('is-flipped');
+          fitCard(card);
+        });
       });
     });
-  });
+
+    fitAll();
+    window.addEventListener('load', fitAll);
+    window.addEventListener('resize', fitAll);
+    if(document.fonts && document.fonts.ready) document.fonts.ready.then(fitAll);
+  })();
 
   // ---------- Gründerangebot: Platz-Zähler ----------
   // Um die freien Plätze zu ändern, im HTML data-taken anpassen (0–5).
