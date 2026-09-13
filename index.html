@@ -1233,6 +1233,108 @@
   .subtab-btn.active{background:var(--forest);border-color:var(--forest);color:var(--bg);}
   .subpanel{display:none;}
   .subpanel.active{display:block;animation:fade .5s ease;}
+
+  /* ===== Anfrage-Formular (Modal) ===== */
+  .modal-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(28,42,27,0.55);
+    backdrop-filter:blur(3px);
+    -webkit-backdrop-filter:blur(3px);
+    display:none;
+    align-items:flex-start;
+    justify-content:center;
+    padding:24px 16px;
+    overflow-y:auto;
+    z-index:200;
+  }
+  .modal-overlay.open{display:flex;animation:fade .3s ease;}
+  body.modal-open{overflow:hidden;}
+  .modal-card{
+    position:relative;
+    background:var(--panel);
+    border:1px solid var(--panel-line);
+    border-radius:2px;
+    width:min(640px,100%);
+    margin:auto;
+    padding:clamp(26px,4vw,44px);
+    box-shadow:0 40px 80px -30px rgba(28,42,27,0.55);
+    animation:modalIn .35s ease;
+  }
+  @keyframes modalIn{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:none;}}
+  .modal-close{
+    position:absolute;
+    top:12px;
+    right:12px;
+    width:38px;
+    height:38px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:none;
+    border:1px solid transparent;
+    border-radius:50%;
+    font-size:1.4rem;
+    line-height:1;
+    color:var(--ink-faint);
+    cursor:pointer;
+    transition:all .25s ease;
+  }
+  .modal-close:hover{background:var(--bg-soft);color:var(--forest);}
+  .modal-card h2{font-size:clamp(1.5rem,3vw,2rem);margin:8px 0 0;}
+  .modal-card .modal-intro{color:var(--ink-dim);margin-top:12px;line-height:1.6;font-size:0.95rem;}
+  .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:26px;}
+  .field{display:flex;flex-direction:column;gap:7px;}
+  .field.full{grid-column:1 / -1;}
+  .field label{
+    font-family:"Jost",sans-serif;
+    font-size:0.72rem;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    color:var(--ink-faint);
+  }
+  .field input,
+  .field select,
+  .field textarea{
+    font-family:"Jost",sans-serif;
+    font-size:0.95rem;
+    color:var(--ink);
+    background:var(--bg);
+    border:1px solid var(--panel-line);
+    border-radius:1px;
+    padding:12px 14px;
+    width:100%;
+    transition:border-color .25s ease, box-shadow .25s ease;
+  }
+  .field textarea{resize:vertical;min-height:120px;line-height:1.55;}
+  .field input:focus,
+  .field select:focus,
+  .field textarea:focus{
+    outline:none;
+    border-color:var(--forest-soft);
+    box-shadow:0 0 0 3px var(--gold-soft);
+  }
+  .form-hint{font-size:0.78rem;color:var(--ink-faint);margin:14px 0 0;line-height:1.5;}
+  .form-actions{margin-top:22px;display:flex;gap:14px;align-items:center;flex-wrap:wrap;}
+  .form-actions .btn{margin:0;}
+  .form-status{font-size:0.85rem;color:var(--ink-dim);margin:0;}
+  .form-status.error{color:#A6412F;}
+  .hp-field{position:absolute;left:-9999px;opacity:0;height:0;overflow:hidden;}
+  .form-success{display:none;text-align:center;padding:14px 0 6px;}
+  .modal-card.is-sent .form-success{display:block;animation:fade .4s ease;}
+  .modal-card.is-sent form,
+  .modal-card.is-sent .modal-head{display:none;}
+  .form-success .tick{
+    width:56px;height:56px;border-radius:50%;
+    background:var(--gold-soft);color:var(--gold-ink);
+    display:flex;align-items:center;justify-content:center;
+    font-size:1.6rem;margin:0 auto 18px;
+  }
+  .form-success h2{margin:0;}
+  .form-success p{color:var(--ink-dim);margin-top:12px;line-height:1.6;}
+  @media (max-width:640px){
+    .form-grid{grid-template-columns:1fr;}
+  }
 </style>
 
 <!-- Strukturierte Daten: hilft Google, Leistung, Ort und Preise zu verstehen -->
@@ -1321,7 +1423,7 @@
       <div class="slots-dots"></div>
       <p class="slots-text"></p>
     </div>
-    <a href="#gruenderangebot" class="founder-bar-btn">Platz sichern</a>
+    <a href="#kontakt" class="founder-bar-btn" data-modal-open data-paket="Gr&uuml;nderangebot">Platz sichern</a>
   </div>
 </div>
 
@@ -1593,7 +1695,7 @@
             <div class="was">220&nbsp;&ndash;&nbsp;280&nbsp;&euro;</div>
             <div class="now">149&nbsp;&euro;</div>
             <span class="save">Fester Gr&uuml;nderpreis</span>
-            <a href="#kontakt" class="btn btn-solid">Platz sichern</a>
+            <a href="#kontakt" class="btn btn-solid" data-modal-open data-paket="Gr&uuml;nderangebot">Platz sichern</a>
             <p class="deadline">Weniger als das kleine Paket &mdash; und du bekommst das gro&szlig;e. Danach gilt der regul&auml;re Preis.</p>
 
             <div class="slots" data-total="5" data-taken="0">
@@ -1622,7 +1724,7 @@
             <li>Inklusive Smoothies, Cocktails &amp; Spezialgetr&auml;nke</li>
             <li>Deckt deinen Bildbedarf f&uuml;r Jahre</li>
           </ul>
-          <a href="#kontakt" class="btn btn-outline">Anfragen</a>
+          <a href="#kontakt" class="btn btn-outline" data-modal-open data-paket="Die Karte">Anfragen</a>
         </div>
 
         <div class="price-card featured">
@@ -1637,7 +1739,7 @@
             <li>Fokus auf Interieur und Team</li>
             <li>Ohne Gerichte &mdash; daf&uuml;r gibt es &bdquo;Die Karte&ldquo;</li>
           </ul>
-          <a href="#gruenderangebot" class="btn btn-outline">Jetzt f&uuml;r 149&nbsp;&euro;</a>
+          <a href="#kontakt" class="btn btn-outline" data-modal-open data-paket="Das Lokal">Jetzt f&uuml;r 149&nbsp;&euro;</a>
         </div>
 
         <div class="price-card">
@@ -1651,7 +1753,7 @@
             <li>Inklusive &bdquo;Die Karte&ldquo; und &bdquo;Das Lokal&ldquo;</li>
             <li>Zus&auml;tzlich G&auml;ste, Events und Momente aus dem Tagesbetrieb</li>
           </ul>
-          <a href="#kontakt" class="btn btn-outline">Anfragen</a>
+          <a href="#kontakt" class="btn btn-outline" data-modal-open data-paket="All you can shoot">Anfragen</a>
         </div>
       </div>
 
@@ -1664,7 +1766,7 @@
         <div class="abo-price">
           <div class="abo-amount">80&nbsp;&euro;</div>
           <p class="abo-note">pro Monat &middot; monatlich k&uuml;ndbar</p>
-          <a href="#kontakt" class="btn btn-outline">Mehr erfahren</a>
+          <a href="#kontakt" class="btn btn-outline" data-modal-open data-paket="Bildabo">Mehr erfahren</a>
         </div>
       </div>
 
@@ -1731,7 +1833,7 @@
         <p class="eyebrow">Kontakt aufnehmen</p>
         <h2>Restaurant, Hotel oder kleines Unternehmen?</h2>
         <p>Schreib uns ein paar Zeilen zu deinen R&auml;umen und dazu, was du brauchst &mdash; wir melden uns innerhalb von zwei Tagen mit einem festen Angebot.</p>
-        <a href="mailto:hallo@jt-foto.de" class="btn btn-solid">Jetzt anfragen</a>
+        <a href="#kontakt" class="btn btn-solid" data-modal-open>Jetzt anfragen</a>
       </div>
       <div class="footer-bottom">
         <span>&copy; <span id="year"></span> J&amp;T Foto &middot; Foodfotografie &amp; Restaurantfotografie</span>
@@ -1746,6 +1848,81 @@
   </footer>
 
 </main>
+
+<!-- ===== Anfrage-Formular (Modal) =====
+     Wird von Netlify Forms verarbeitet. Die Einsendungen erscheinen im
+     Netlify-Dashboard unter "Forms" und werden per E-Mail weitergeleitet. -->
+<div class="modal-overlay" id="anfrageModal" role="dialog" aria-modal="true" aria-labelledby="anfrageTitel">
+  <div class="modal-card" id="anfrageCard">
+    <button type="button" class="modal-close" id="anfrageClose" aria-label="Formular schlie&szlig;en">&times;</button>
+
+    <div class="modal-head">
+      <p class="eyebrow">Anfrage senden</p>
+      <h2 id="anfrageTitel">Erz&auml;hl uns von deinem Shooting</h2>
+      <p class="modal-intro">Ein paar Zeilen gen&uuml;gen &mdash; wir melden uns innerhalb von zwei Tagen mit einem festen Angebot und einem Terminvorschlag.</p>
+    </div>
+
+    <form id="anfrageForm" name="anfrage" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+      <input type="hidden" name="form-name" value="anfrage">
+      <p class="hp-field">
+        <label>Bitte nicht ausf&uuml;llen: <input name="bot-field"></label>
+      </p>
+
+      <div class="form-grid">
+        <div class="field">
+          <label for="f-name">Name *</label>
+          <input type="text" id="f-name" name="name" required autocomplete="name" placeholder="Vor- und Nachname">
+        </div>
+        <div class="field">
+          <label for="f-firma">Unternehmen</label>
+          <input type="text" id="f-firma" name="unternehmen" autocomplete="organization" placeholder="Restaurant, Caf&eacute;, Hotel &hellip;">
+        </div>
+        <div class="field">
+          <label for="f-mail">E-Mail *</label>
+          <input type="email" id="f-mail" name="email" required autocomplete="email" placeholder="name@betrieb.de">
+        </div>
+        <div class="field">
+          <label for="f-tel">Telefon (optional)</label>
+          <input type="tel" id="f-tel" name="telefon" autocomplete="tel" placeholder="+49 &hellip;">
+        </div>
+        <div class="field">
+          <label for="f-datum">Wunschtermin</label>
+          <input type="date" id="f-datum" name="wunschtermin">
+        </div>
+        <div class="field">
+          <label for="f-paket">Interesse an</label>
+          <select id="f-paket" name="paket">
+            <option value="">Bitte w&auml;hlen</option>
+            <option value="Gr&uuml;nderangebot">Gr&uuml;nderangebot &mdash; 149 &euro;</option>
+            <option value="Die Karte">Die Karte &mdash; 199 &euro;</option>
+            <option value="Das Lokal">Das Lokal &mdash; 219 &euro;</option>
+            <option value="All you can shoot">All you can shoot &mdash; 399 &euro;</option>
+            <option value="Bildabo">Bildabo &mdash; 80 &euro; / Monat</option>
+            <option value="Noch unsicher">Noch unsicher &mdash; bitte beraten</option>
+          </select>
+        </div>
+        <div class="field full">
+          <label for="f-text">Was m&ouml;chtest du fotografieren lassen? *</label>
+          <textarea id="f-text" name="nachricht" required placeholder="Z.&nbsp;B.: Neue Herbstkarte mit 8 Gerichten, dazu ein paar Aufnahmen vom Gastraum. Wir sind in Jena, dienstags ist Ruhetag."></textarea>
+        </div>
+      </div>
+
+      <p class="form-hint">* Pflichtfelder. Deine Angaben nutzen wir ausschlie&szlig;lich, um deine Anfrage zu beantworten.</p>
+
+      <div class="form-actions">
+        <button type="submit" class="btn btn-solid" id="anfrageSubmit">Anfrage senden</button>
+        <p class="form-status" id="anfrageStatus" role="status"></p>
+      </div>
+    </form>
+
+    <div class="form-success">
+      <div class="tick">&#10003;</div>
+      <h2>Danke &mdash; deine Anfrage ist da!</h2>
+      <p>Wir melden uns innerhalb von zwei Tagen bei dir. Wenn es eilig ist, schreib uns direkt an <a href="mailto:hallo@jt-foto.de">hallo@jt-foto.de</a>.</p>
+      <button type="button" class="btn btn-outline" data-modal-close style="margin-top:22px;">Schlie&szlig;en</button>
+    </div>
+  </div>
+</div>
 
 <script>
   document.getElementById('year').textContent = new Date().getFullYear();
@@ -1957,6 +2134,89 @@
     });
 
     go(0);
+  })();
+
+  // ===== Anfrage-Formular (Modal) =====
+  (function(){
+    const overlay = document.getElementById('anfrageModal');
+    if(!overlay) return;
+    const card    = document.getElementById('anfrageCard');
+    const form    = document.getElementById('anfrageForm');
+    const status  = document.getElementById('anfrageStatus');
+    const submit  = document.getElementById('anfrageSubmit');
+    const paket   = document.getElementById('f-paket');
+    let lastFocus = null;
+
+    // Wunschtermin: keine Termine in der Vergangenheit
+    const datum = document.getElementById('f-datum');
+    if(datum) datum.min = new Date().toISOString().slice(0,10);
+
+    function openModal(preset){
+      lastFocus = document.activeElement;
+      card.classList.remove('is-sent');
+      status.textContent = '';
+      status.classList.remove('error');
+      if(preset && paket){
+        const match = Array.from(paket.options).find(o => o.value === preset);
+        if(match) paket.value = preset;
+      }
+      overlay.classList.add('open');
+      document.body.classList.add('modal-open');
+      setTimeout(() => { const f = document.getElementById('f-name'); if(f) f.focus(); }, 60);
+    }
+
+    function closeModal(){
+      overlay.classList.remove('open');
+      document.body.classList.remove('modal-open');
+      if(lastFocus && lastFocus.focus) lastFocus.focus();
+    }
+
+    // Alle Kontakt-Buttons öffnen das Formular statt nur ans Seitenende zu springen
+    document.querySelectorAll('a[href="#kontakt"], [data-modal-open]').forEach(el => {
+      el.addEventListener('click', (e) => {
+        e.preventDefault();
+        openModal(el.getAttribute('data-paket'));
+      });
+    });
+
+    document.getElementById('anfrageClose').addEventListener('click', closeModal);
+    overlay.querySelectorAll('[data-modal-close]').forEach(b => b.addEventListener('click', closeModal));
+    overlay.addEventListener('click', (e) => { if(e.target === overlay) closeModal(); });
+    document.addEventListener('keydown', (e) => {
+      if(e.key === 'Escape' && overlay.classList.contains('open')) closeModal();
+    });
+
+    // Absenden per AJAX an Netlify Forms — die Seite springt dabei nicht weg
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if(!form.reportValidity()) return;
+      submit.disabled = true;
+      const oldLabel = submit.textContent;
+      submit.textContent = 'Wird gesendet …';
+      status.classList.remove('error');
+      status.textContent = '';
+
+      const data = new URLSearchParams(new FormData(form)).toString();
+      fetch('/', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        body: data
+      })
+      .then(res => {
+        if(!res.ok) throw new Error(res.status);
+        form.reset();
+        card.classList.add('is-sent');
+        card.scrollIntoView({block:'nearest'});
+      })
+      .catch(() => {
+        status.classList.add('error');
+        status.innerHTML = 'Das hat leider nicht geklappt. Schreib uns bitte direkt an <a href="mailto:hallo@jt-foto.de">hallo@jt-foto.de</a>.';
+      })
+      .finally(() => {
+        submit.disabled = false;
+        submit.textContent = oldLabel;
+      });
+    });
   })();
 </script>
 
